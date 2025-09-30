@@ -109,6 +109,7 @@ src/app/
 ## Notas
 
 - Los archivos de configuración (`environment.ts`) están en `.gitignore` para no subir claves al repositorio
+- Configurado para deploy automático en Vercel
 - Usa lazy loading para cargar componentes solo cuando se necesitan
 - Manejo de errores y estados de carga
 - Diseño responsive con CSS Grid y Flexbox
