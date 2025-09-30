@@ -1,0 +1,17 @@
+{
+  "buildCommand": "npm run build:prod",
+  "outputDirectory": "dist/movie-website/browser",
+  "framework": "angular",
+  "installCommand": "npm install",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ],
+  "env": {
+    "TMDB_BASE_URL": "https://api.themoviedb.org/3",
+    "TMDB_IMAGE_BASE_URL": "https://image.tmdb.org/t/p",
+    "TMDB_DEFAULT_LANGUAGE": "es-ES"
+  }
+}
