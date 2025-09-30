@@ -1,0 +1,140 @@
+<div class="movie-detail-container">
+  <!-- Botón de regreso -->
+  <button (click)="goBack()" class="back-button" aria-label="Volver al listado">
+    <span class="back-icon">←</span>
+    Volver
+  </button>
+
+  <!-- Estado de carga -->
+  <div *ngIf="loading$ | async" class="loading-container">
+    <div class="loading-spinner"></div>
+    <p class="loading-text">Cargando detalles de la película...</p>
+  </div>
+
+  <!-- Estado de error -->
+  <div *ngIf="error$ | async as error" class="error-container">
+    <div class="error-icon">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="8" x2="12" y2="12"/>
+        <line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+    </div>
+    <p class="error-message">{{ error }}</p>
+    <button (click)="goBack()" class="retry-button">
+      Volver al listado
+    </button>
+  </div>
+
+  <!-- Detalle de la película -->
+  <div *ngIf="movie$ | async as movie" class="movie-detail">
+    <!-- Hero section con backdrop -->
+    <div class="movie-hero" [style.background-image]="'url(' + getBackdropUrl(movie) + ')'">
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <div class="movie-poster-container">
+          <img
+            [src]="getPosterUrl(movie)"
+            [alt]="movie.title"
+            class="movie-poster"
+          />
+        </div>
+        
+        <div class="movie-header">
+          <h1 class="movie-title">{{ movie.title }}</h1>
+          <p class="movie-tagline" *ngIf="movie.tagline">{{ movie.tagline }}</p>
+          
+          <div class="movie-meta">
+            <div class="rating-badge" [style.background-color]="getRatingColor(movie.vote_average)">
+              <span class="rating-icon">⭐</span>
+              <span class="rating-value">{{ formatRating(movie.vote_average) }}</span>
+              <span class="rating-count">({{ movie.vote_count }} votos)</span>
+            </div>
+            
+            <div class="meta-item">
+              <span class="meta-label">Año:</span>
+              <span class="meta-value">{{ formatReleaseDate(movie.release_date) }}</span>
+            </div>
+            
+            <div class="meta-item" *ngIf="movie.runtime">
+              <span class="meta-label">Duración:</span>
+              <span class="meta-value">{{ formatRuntime(movie.runtime) }}</span>
+            </div>
+            
+            <div class="meta-item">
+              <span class="meta-label">Géneros:</span>
+              <span class="meta-value">{{ getGenreNames(movie) }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contenido principal -->
+    <div class="movie-content">
+      <div class="content-grid">
+        <!-- Sinopsis -->
+        <section class="synopsis-section">
+          <h2 class="section-title">Sinopsis</h2>
+          <p class="synopsis-text">{{ movie.overview }}</p>
+        </section>
+
+        <!-- Información adicional -->
+        <section class="info-section">
+          <h2 class="section-title">Información</h2>
+          
+          <div class="info-grid">
+            <div class="info-item" *ngIf="movie.status">
+              <span class="info-label">Estado:</span>
+              <span class="info-value">{{ movie.status }}</span>
+            </div>
+            
+            <div class="info-item" *ngIf="movie.original_language">
+              <span class="info-label">Idioma original:</span>
+              <span class="info-value">{{ movie.original_language.toUpperCase() }}</span>
+            </div>
+            
+            <div class="info-item" *ngIf="movie.production_countries.length > 0">
+              <span class="info-label">País:</span>
+              <span class="info-value">{{ getProductionCountries(movie) }}</span>
+            </div>
+            
+            <div class="info-item" *ngIf="movie.spoken_languages.length > 0">
+              <span class="info-label">Idiomas:</span>
+              <span class="info-value">{{ getSpokenLanguages(movie) }}</span>
+            </div>
+            
+            <div class="info-item" *ngIf="movie.budget > 0">
+              <span class="info-label">Presupuesto:</span>
+              <span class="info-value">{{ formatBudget(movie.budget) }}</span>
+            </div>
+            
+            <div class="info-item" *ngIf="movie.revenue > 0">
+              <span class="info-label">Ingresos:</span>
+              <span class="info-value">{{ formatRevenue(movie.revenue) }}</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Productoras -->
+        <section class="companies-section" *ngIf="movie.production_companies.length > 0">
+          <h2 class="section-title">Productoras</h2>
+          <div class="companies-list">
+            <div
+              *ngFor="let company of movie.production_companies"
+              class="company-item"
+            >
+              <img
+                *ngIf="company.logo_path"
+                [src]="getImageUrl(company.logo_path, 'w200')"
+                [alt]="company.name"
+                class="company-logo"
+              />
+              <span class="company-name">{{ company.name }}</span>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>

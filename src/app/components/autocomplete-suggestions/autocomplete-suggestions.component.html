@@ -1,0 +1,10 @@
+<div *ngIf="isVisible && suggestions.length > 0" class="suggestions">
+  <div 
+    *ngFor="let suggestion of suggestions" 
+    class="suggestion"
+    (click)="selectSuggestion(suggestion)"
+  >
+    {{ suggestion.title }}
+    <span *ngIf="suggestion.year" class="year">({{ suggestion.year }})</span>
+  </div>
+</div>

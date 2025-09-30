@@ -1,0 +1,129 @@
+<div class="movie-list-container">
+  <!-- Header con búsqueda -->
+  <header class="header">
+    <div class="header-content">
+      <h1 class="title">Películas</h1>
+      <div class="search-container">
+        <input
+          type="text"
+          [(ngModel)]="searchQuery"
+          (input)="onSearchInputChange()"
+          (keydown)="onKeyDown($event)"
+          placeholder="Buscar películas..."
+          class="search-input"
+        />
+        <button
+          *ngIf="searchQuery"
+          (click)="clearSearch()"
+          class="clear-button"
+          aria-label="Limpiar búsqueda"
+        >
+          ×
+        </button>
+        
+        <app-autocomplete-suggestions
+          [searchTerm$]="autocompleteTerm$"
+          [isVisible]="showSuggestions"
+          (suggestionSelected)="onSuggestionSelected($event)"
+        ></app-autocomplete-suggestions>
+      </div>
+    </div>
+  </header>
+
+  <!-- Estado de carga -->
+  <div *ngIf="loading$ | async" class="loading-container">
+    <div class="loading-spinner"></div>
+    <p class="loading-text">Cargando películas...</p>
+  </div>
+
+  <!-- Estado de error -->
+  <div *ngIf="error$ | async as error" class="error-container">
+    <div class="error-icon">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="8" x2="12" y2="12"/>
+        <line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+    </div>
+    <p class="error-message">{{ error }}</p>
+    <button (click)="loadPopularMovies()" class="retry-button">
+      Reintentar
+    </button>
+  </div>
+
+  <!-- Grid de películas -->
+  <div *ngIf="!(loading$ | async) && !(error$ | async)" class="movies-grid">
+    <div
+      *ngFor="let movie of movies$ | async"
+      class="movie-card"
+      (click)="goToMovieDetail(movie)"
+      role="button"
+      tabindex="0"
+      (keydown.enter)="goToMovieDetail(movie)"
+      (keydown.space)="goToMovieDetail(movie)"
+    >
+      <div class="movie-poster">
+        <img
+          [src]="getMovieImageUrl(movie)"
+          [alt]="movie.title"
+          class="poster-image"
+          loading="lazy"
+        />
+        <div class="movie-overlay">
+          <div class="movie-rating">
+            <span class="rating-icon">⭐</span>
+            <span class="rating-value">{{ formatRating(movie.vote_average) }}</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="movie-info">
+        <h3 class="movie-title">{{ movie.title }}</h3>
+        <p class="movie-year">{{ formatReleaseDate(movie.release_date) }}</p>
+        <p class="movie-overview">{{ movie.overview | slice:0:100 }}{{ movie.overview.length > 100 ? '...' : '' }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Paginación -->
+  <div *ngIf="!(loading$ | async) && !(error$ | async)" class="pagination-container">
+    <div class="pagination" *ngIf="pagination$ | async as pagination">
+      <button
+        *ngIf="pagination.currentPage > 1"
+        (click)="onPageChange(pagination.currentPage - 1)"
+        class="pagination-button"
+        [disabled]="loading$ | async"
+      >
+        ← Anterior
+      </button>
+      
+      <span class="pagination-info">
+        Página {{ pagination.currentPage }} de {{ pagination.totalPages }}
+      </span>
+      
+      <button
+        *ngIf="pagination.currentPage < pagination.totalPages"
+        (click)="onPageChange(pagination.currentPage + 1)"
+        class="pagination-button"
+        [disabled]="loading$ | async"
+      >
+        Siguiente →
+      </button>
+    </div>
+  </div>
+
+  <!-- Mensaje cuando no hay resultados -->
+  <div *ngIf="!(loading$ | async) && !(error$ | async) && (movies$ | async)?.length === 0" class="no-results">
+    <div class="no-results-icon">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+        <line x1="8" y1="21" x2="16" y2="21"/>
+        <line x1="12" y1="17" x2="12" y2="21"/>
+      </svg>
+    </div>
+    <h3 class="no-results-title">No se encontraron películas</h3>
+    <p class="no-results-message">
+      {{ searchQuery ? 'Intenta con otros términos de búsqueda.' : 'No hay películas disponibles en este momento.' }}
+    </p>
+  </div>
+</div>

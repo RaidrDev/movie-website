@@ -1,59 +1,114 @@
-# MovieWebsite
+# Películas - Web de Películas
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.3.
+Una web sencilla hecha con Angular para ver películas usando la API de The Movie Database.
 
-## Development server
+## ¿Qué hace?
 
-To start a local development server, run:
+- Muestra películas populares
+- Puedes buscar películas
+- Ves detalles de cada película
+- Funciona en móvil y ordenador
 
-```bash
-ng serve
+## Cómo empezar
+
+### 1. Conseguir la API Key
+
+Necesitas una clave de la API de TMDB:
+
+1. Ve a [themoviedb.org](https://www.themoviedb.org/)
+2. Regístrate gratis
+3. Ve a **Settings** > **API**
+4. Pide una API key
+5. Copia tu clave
+
+### 2. Configurar la clave
+
+Edita el archivo `src/environments/environment.ts` y cambia `TU_API_KEY_AQUI` por tu clave real:
+
+```typescript
+export const environment = {
+  production: false,
+  tmdbApiKey: 'tu_clave_aqui',
+  tmdbBaseUrl: 'https://api.themoviedb.org/3',
+  tmdbImageBaseUrl: 'https://image.tmdb.org/t/p',
+  tmdbDefaultLanguage: 'es-ES'
+};
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+### 3. Instalar y ejecutar
 
 ```bash
-ng generate component component-name
+npm install
+npm start
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Ya está. Abre `http://localhost:4200` en el navegador.
 
-```bash
-ng generate --help
+## Cómo está hecho
+
+### Estructura básica
+
+```
+src/app/
+├── components/
+│   ├── movie-list/          # Lista de películas
+│   ├── movie-detail/        # Detalle de película
+│   └── autocomplete-suggestions/  # Sugerencias de búsqueda
+├── services/
+│   ├── movie-api.service.ts # Llama a la API
+│   ├── movie-state.service.ts # Guarda el estado
+│   └── movie.service.ts     # Orquesta todo
+└── models/
+    └── movie.interface.ts   # Tipos de datos
 ```
 
-## Building
+### Servicios
 
-To build the project run:
+- **MovieApiService**: Se encarga de llamar a la API de TMDB
+- **MovieStateService**: Guarda el estado de la aplicación (películas, carga, errores)
+- **MovieService**: Facilita el uso de los otros servicios
+- **AutocompleteService**: Maneja las sugerencias de búsqueda
 
-```bash
-ng build
-```
+### Componentes
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+- **MovieListComponent**: Muestra la lista de películas y el buscador
+- **MovieDetailComponent**: Muestra los detalles de una película
+- **AutocompleteSuggestionsComponent**: Muestra sugerencias al buscar
 
-## Running unit tests
+## Funcionalidades
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+### Lista de películas
+- Carga películas populares automáticamente
+- Buscador con sugerencias
+- Paginación
+- Estados de carga y error
+- Diseño responsive
 
-```bash
-ng test
-```
+### Detalle de película
+- Información completa
+- Imagen de fondo
+- Calificación con colores
+- Datos técnicos (duración, presupuesto, etc.)
+- Productoras
 
-## Running end-to-end tests
+## Tecnologías
 
-For end-to-end (e2e) testing, run:
+- Angular 20
+- TypeScript
+- RxJS para programación reactiva
+- CSS con variables
+- API de The Movie Database
 
-```bash
-ng e2e
-```
+## Scripts
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+- `npm start` - Ejecuta en desarrollo
+- `npm run build` - Construye para producción
+- `npm run build:prod` - Construye optimizado para producción
+- `npm test` - Ejecuta tests
 
-## Additional Resources
+## Notas
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- Los archivos de configuración (`environment.ts`) están en `.gitignore` para no subir claves al repositorio
+- Usa lazy loading para cargar componentes solo cuando se necesitan
+- Manejo de errores y estados de carga
+- Diseño responsive con CSS Grid y Flexbox
