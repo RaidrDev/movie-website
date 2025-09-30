@@ -1,18 +1,17 @@
 const fs = require('fs');
 const path = require('path');
 
+console.log('🔧 Building environment files for Vercel...');
+console.log('Environment variables available:', {
+  TMDB_API_KEY: process.env.TMDB_API_KEY || 'NOT_SET',
+  TMDB_BASE_URL: process.env.TMDB_BASE_URL || 'NOT_SET',
+  TMDB_IMAGE_BASE_URL: process.env.TMDB_IMAGE_BASE_URL || 'NOT_SET',
+  TMDB_DEFAULT_LANGUAGE: process.env.TMDB_DEFAULT_LANGUAGE || 'NOT_SET'
+});
+
 // Crear el archivo environment.prod.ts para producción
 const prodEnvironmentContent = `export const environment = {
   production: true,
-  tmdbApiKey: '${process.env.TMDB_API_KEY || 'TU_API_KEY_AQUI'}',
-  tmdbBaseUrl: '${process.env.TMDB_BASE_URL || 'https://api.themoviedb.org/3'}',
-  tmdbImageBaseUrl: '${process.env.TMDB_IMAGE_BASE_URL || 'https://image.tmdb.org/t/p'}',
-  tmdbDefaultLanguage: '${process.env.TMDB_DEFAULT_LANGUAGE || 'es-ES'}'
-};`;
-
-// Crear el archivo environment.ts para desarrollo
-const devEnvironmentContent = `export const environment = {
-  production: false,
   tmdbApiKey: '${process.env.TMDB_API_KEY || 'TU_API_KEY_AQUI'}',
   tmdbBaseUrl: '${process.env.TMDB_BASE_URL || 'https://api.themoviedb.org/3'}',
   tmdbImageBaseUrl: '${process.env.TMDB_IMAGE_BASE_URL || 'https://image.tmdb.org/t/p'}',
@@ -26,7 +25,8 @@ if (!fs.existsSync(envDir)) {
 }
 
 // Escribir archivos
-fs.writeFileSync(path.join(envDir, 'environment.ts'), devEnvironmentContent);
 fs.writeFileSync(path.join(envDir, 'environment.prod.ts'), prodEnvironmentContent);
 
-console.log('✅ Environment files created for production');
+console.log('✅ Environment files created successfully');
+console.log('📁 Files created:');
+console.log('  - src/environments/environment.prod.ts');

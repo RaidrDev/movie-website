@@ -2,8 +2,8 @@
   "buildCommand": "npm run build:prod",
   "outputDirectory": "dist/movie-website",
   "framework": "angular",
+  "installCommand": "npm install",
   "env": {
-    "TMDB_API_KEY": "@tmdb_api_key",
     "TMDB_BASE_URL": "https://api.themoviedb.org/3",
     "TMDB_IMAGE_BASE_URL": "https://image.tmdb.org/t/p",
     "TMDB_DEFAULT_LANGUAGE": "es-ES"

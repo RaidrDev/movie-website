@@ -106,6 +106,27 @@ src/app/
 - `npm run build:prod` - Construye optimizado para producción
 - `npm test` - Ejecuta tests
 
+## Deploy en Vercel
+
+### Configurar variables de entorno en Vercel:
+
+1. Ve a tu proyecto en Vercel
+2. **Settings** → **Environment Variables**
+3. Agrega estas variables:
+   ```
+   TMDB_API_KEY = tu_clave_real_de_tmdb
+   TMDB_BASE_URL = https://api.themoviedb.org/3
+   TMDB_IMAGE_BASE_URL = https://image.tmdb.org/t/p
+   TMDB_DEFAULT_LANGUAGE = es-ES
+   ```
+
+### Para desarrollo local:
+```bash
+cp env.example .env
+# Edita .env con tu clave real
+npm start
+```
+
 ## Notas
 
 - Los archivos de configuración (`environment.ts`) están en `.gitignore` para no subir claves al repositorio
